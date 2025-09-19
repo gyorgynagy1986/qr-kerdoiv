@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
 
@@ -14,7 +16,6 @@ const QuestionnaireForm = () => {
       questions: [
         { id: 'qr_code_type', text: 'Az egyedi digitális kód QR-kódot jelent - bármilyen okos eszközzel le lehessen olvasni?', type: 'radio', options: ['Igen', 'Nem', 'Részben'] },
         { id: 'furniture_user_count', text: 'Körülbelül mennyi bútort és felhasználót kell kezelni a rendszerben?', type: 'textarea' },
-        { id: 'furniture_types', text: 'Milyen típusú bútorok kerülnek a rendszerbe? (irodai, lakberendezési, speciális)', type: 'text' },
         { id: 'deadline', text: 'A megvalósítás határideje milyen sürgős?', type: 'select', options: ['1-3 hónap', '3-6 hónap', '6+ hónap'] },
         { id: 'existing_systems', text: 'Van-e már meglévő készletgazdálkodási vagy ERP rendszer, amivel integrálni kell?', type: 'textarea' }
       ]
@@ -48,8 +49,6 @@ const QuestionnaireForm = () => {
       questions: [
         { id: 'office_requirement', text: 'Mit jelent pontosan, hogy "Microsoft Office csomaggal ellátott eszközök"? Miért kitétel az Office?', type: 'textarea' },
         { id: 'offline_access', text: 'Az adatbázis offline elérhetőségére is szükség van?', type: 'radio', options: ['Igen', 'Nem', 'Részlegesen'] },
-        { id: 'browser_support', text: 'Milyen böngészőket kell támogatni? (Chrome, Safari, Edge, stb.)', type: 'text' },
-        { id: 'tech_platform', text: 'Van-e előnyben részesített technológiai platform? (Windows, web-based, cloud, on-premise)', type: 'text' },
         { id: 'security_requirements', text: 'Milyen biztonsági követelmények vannak? (GDPR megfelelőség, adattitkosítás, stb.)', type: 'textarea' },
         { id: 'external_integrations', text: 'Szükséges-e külső rendszerekkel való integráció? (HR, pénzügy, facility management)', type: 'textarea' }
       ]
@@ -62,7 +61,21 @@ const QuestionnaireForm = () => {
         { id: 'export_options', text: 'Igény-e az adatok exportálási lehetősége? Milyen formátumokban?', type: 'text' },
         { id: 'existing_database', text: 'Van-e meglévő adatbázis, amit migrálni kell?', type: 'textarea' },
         { id: 'backup_frequency', text: 'Milyen gyakran kell biztonsági mentést készíteni?', type: 'select', options: ['Naponta', 'Hetente', 'Havonta', 'Egyéb'] },
-        { id: 'data_storage', text: 'Hol tárolódjanak az adatok? (helyi szerver, cloud, hibrid megoldás)', type: 'select', options: ['Helyi szerver', 'Cloud', 'Hibrid', 'Közömbös'] }
+      ]
+    },
+     {
+      id: 'architecture',
+      title: 'Rendszerarchitektúra és fejlesztési igények',
+      questions: [
+        { id: 'custom_development', text: 'Teljes egyedi fejlesztésre van szükség? Kell-e teljes web API fejlesztése a semmiből?', type: 'textarea' },
+        { id: 'preferred_tech', text: 'Van-e előnyben részesített programozási nyelv/keretrendszer?', type: 'text' },
+        { id: 'cms_needed', text: 'CMS (tartalomkezelő) rendszer szükséges? Ki fogja feltölteni/szerkeszteni az alapadatokat?', type: 'textarea' },
+        { id: 'editor_complexity', text: 'Milyen szintű szerkesztői felület kell? (egyszerű form-ok vagy fejlett editor)', type: 'select', options: ['Egyszerű form-ok', 'Fejlett editor', 'Mindkettő'] },
+        { id: 'qr_access_level', text: 'QR kód által elérhető oldal hozzáférési szintje (publikus/jogosultsághoz kötött/hibrid)?', type: 'select', options: ['Teljesen publikus', 'Bejelentkezéshez kötött', 'Hibrid (alap publikus, részletek védettek)'] },
+        { id: 'public_data_examples', text: 'Milyen adatok lehetnek nyilvánosak a QR kód beolvasásakor?', type: 'textarea' },
+        { id: 'api_access', text: 'Kik férhetnek hozzá az API-hoz? (csak saját rendszer, külső partnerek, mobilalkalmazás)', type: 'textarea' },
+        { id: 'api_security', text: 'Szükséges-e API kulcsok/token alapú authentikáció? Rate limiting?', type: 'textarea' },
+        { id: 'data_privacy', text: 'GDPR megfelelőség a publikus adatoknál - milyen személyes adatok kezelése szükséges?', type: 'textarea' }
       ]
     },
     {
@@ -93,30 +106,6 @@ const QuestionnaireForm = () => {
         { id: 'license_model', text: 'Szükséges-e folyamatos licencdíj vagy egyszeri költség preferált?', type: 'select', options: ['Egyszeri', 'Licencdíj', 'Hibrid'] }
       ]
     },
-    {
-      id: 'business',
-      title: 'Üzleti célok',
-      questions: [
-        { id: 'motivation', text: 'Mi a fő motiváció a rendszer bevezetésére? (hatékonyság, compliance, cost-saving)', type: 'textarea' },
-        { id: 'roi_expectations', text: 'Milyen megtérülést várnak a beruházástól?', type: 'textarea' },
-        { id: 'expansion_plans', text: 'Van-e tervezett bővítés más telephelyekre/részlegekre?', type: 'textarea' }
-      ]
-    },
-    {
-      id: 'architecture',
-      title: 'Rendszerarchitektúra és fejlesztési igények',
-      questions: [
-        { id: 'custom_development', text: 'Teljes egyedi fejlesztésre van szükség? Kell-e teljes web API fejlesztése a semmiből?', type: 'textarea' },
-        { id: 'preferred_tech', text: 'Van-e előnyben részesített programozási nyelv/keretrendszer?', type: 'text' },
-        { id: 'cms_needed', text: 'CMS (tartalomkezelő) rendszer szükséges? Ki fogja feltölteni/szerkeszteni az alapadatokat?', type: 'textarea' },
-        { id: 'editor_complexity', text: 'Milyen szintű szerkesztői felület kell? (egyszerű form-ok vagy fejlett editor)', type: 'select', options: ['Egyszerű form-ok', 'Fejlett editor', 'Mindkettő'] },
-        { id: 'qr_access_level', text: 'QR kód által elérhető oldal hozzáférési szintje (publikus/jogosultsághoz kötött/hibrid)?', type: 'select', options: ['Teljesen publikus', 'Bejelentkezéshez kötött', 'Hibrid (alap publikus, részletek védettek)'] },
-        { id: 'public_data_examples', text: 'Milyen adatok lehetnek nyilvánosak a QR kód beolvasásakor?', type: 'textarea' },
-        { id: 'api_access', text: 'Kik férhetnek hozzá az API-hoz? (csak saját rendszer, külső partnerek, mobilalkalmazás)', type: 'textarea' },
-        { id: 'api_security', text: 'Szükséges-e API kulcsok/token alapú authentikáció? Rate limiting?', type: 'textarea' },
-        { id: 'data_privacy', text: 'GDPR megfelelőség a publikus adatoknál - milyen személyes adatok kezelése szükséges?', type: 'textarea' }
-      ]
-    }
   ];
 
   const handleInputChange = (questionId, value) => {
@@ -133,34 +122,57 @@ const QuestionnaireForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log('🚀 Submit button clicked');
+    console.log('📝 Form data:', formData);
+    console.log('📊 Number of responses:', Object.keys(formData).length);
+    
     setIsSubmitting(true);
     setSubmitStatus(null);
 
+    const payload = {
+      responses: formData,
+      timestamp: new Date().toISOString(),
+    };
+
+    console.log('📦 Payload to send:', payload);
+
     try {
+      console.log('🌐 Making API call to /api/send-questionnaire...');
+      
       const response = await fetch('/api/send-questionnaire', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          responses: formData,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(payload),
       });
 
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
+
+      const responseData = await response.json();
+      console.log('📄 Response data:', responseData);
+
       if (response.ok) {
+        console.log('✅ Success!');
         setSubmitStatus('success');
         setFormData({});
       } else {
+        console.log('❌ Error response:', responseData);
         setSubmitStatus('error');
       }
     } catch (error) {
-      console.error('Submit error:', error);
+      console.error('💥 Submit error:', error);
+      console.error('🔍 Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
+      console.log('🏁 Submit process finished');
     }
   };
 
